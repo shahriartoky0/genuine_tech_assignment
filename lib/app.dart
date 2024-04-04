@@ -1,16 +1,22 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'Screen/loginScreen.dart';
+import 'package:genuine_tech_assignment/ui/Screen/log_in_screen.dart';
 
 class CustomerManagementApp extends StatelessWidget {
+  const CustomerManagementApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: LoginScreen(),
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
           primaryColor: Colors.teal,
           primarySwatch: Colors.teal,
+          appBarTheme: AppBarTheme(
+              titleTextStyle: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600)),
           inputDecorationTheme: InputDecorationTheme(
             fillColor: Colors.white30,
             filled: true,
@@ -26,7 +32,7 @@ class CustomerManagementApp extends StatelessWidget {
               displayMedium: TextStyle(
                   fontSize: 26,
                   color: Colors.black54,
-                  fontWeight: FontWeight.w600))),
+                  fontWeight: FontWeight.w700))),
     );
   }
 }
