@@ -156,10 +156,9 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
       setState(() {});
     }
     if (response.isSuccess) {
-      // print(response.jsonResponse);
+
       customerListModel = CustomerListModel.fromJson(response.jsonResponse!);
-      // print(customerListModel.pageInfo?.pageNo);
-      // print(customerListModel.customerList?.length);
+
     } else {
       print(response.errorMessage);
     }
