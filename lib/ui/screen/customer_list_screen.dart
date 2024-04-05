@@ -3,6 +3,7 @@ import 'package:genuine_tech_assignment/data/models/customer_list_model.dart';
 import 'package:genuine_tech_assignment/data/network_caller/network_caller.dart';
 import 'package:genuine_tech_assignment/data/network_caller/network_response.dart';
 import 'package:genuine_tech_assignment/data/utilities/urls.dart';
+import 'package:number_paginator/number_paginator.dart';
 import '../widget/current_app_bar.dart';
 import 'customer_details_screen.dart';
 
@@ -13,7 +14,15 @@ class CustomerListScreen extends StatefulWidget {
 
 class _CustomerListScreenState extends State<CustomerListScreen> {
   CustomerListModel customerListModel = CustomerListModel();
+
   bool customerListLoader = false;
+
+  //page Indications
+  late final totalPages = customerListModel.pageInfo?.pageSize ?? 20;
+
+  late int currentPage = 0;
+
+  //page indication Ends
 
   @override
   void initState() {
@@ -37,7 +46,7 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
             visible: customerListLoader == false,
             replacement: const Center(
               child: Padding(
-                padding: EdgeInsets.all(16.0),
+                padding: EdgeInsets.fromLTRB(16,50,16,50),
                 child: CircularProgressIndicator(),
               ),
             ),
@@ -48,6 +57,7 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                     if (customerListModel.customerList == null) {
                       customerListLoader = true;
                     }
+
                     final customer = customerListModel.customerList?[index];
                     return Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -116,26 +126,40 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                   }),
             ),
           ),
+          NumberPaginator(
+            numberPages: totalPages,
+            onPageChange: (index) {
+              currentPage = index + 1;
+              _loadCustomerList(pageNumber: currentPage.toString());
+
+              setState(() {});
+            },
+          )
         ],
       )),
     );
   }
 
-  Future<void> _loadCustomerList() async {
+  Future<void> _loadCustomerList(
+      {String pageNumber = '1',
+      String totalNumberOfPage = '20',
+      String sortBy = 'Balance'}) async {
     customerListLoader = true;
     if (mounted) {
       setState(() {});
     }
-    final NetworkResponse response =
-        await NetworkCaller().getRequest(URL.customerListUrl());
+    final NetworkResponse response = await NetworkCaller().getRequest(
+        URL.customerListUrl(
+            pageNo: pageNumber, pageSize: totalNumberOfPage, sort: sortBy));
     customerListLoader = false;
     if (mounted) {
       setState(() {});
     }
     if (response.isSuccess) {
-      print(response.jsonResponse);
+      // print(response.jsonResponse);
       customerListModel = CustomerListModel.fromJson(response.jsonResponse!);
-      print(customerListModel.customerList?.length);
+      // print(customerListModel.pageInfo?.pageNo);
+      // print(customerListModel.customerList?.length);
     } else {
       print(response.errorMessage);
     }

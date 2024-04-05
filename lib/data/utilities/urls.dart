@@ -13,6 +13,6 @@ class URL {
   static String customerListUrl(
           { String pageNo = '1',
           String pageSize = '20',
-          String sort = 'Balance'}) =>
-      "${_baseUrl}GetCustomerList?searchquery&pageNo=$pageNo&$pageSize=20&SortyBy=$sort";
+          String sort = 'Name'}) =>
+      "${_baseUrl}GetCustomerList?searchquery&pageNo=$pageNo&pageSize=$pageSize&SortyBy=$sort";
 }
