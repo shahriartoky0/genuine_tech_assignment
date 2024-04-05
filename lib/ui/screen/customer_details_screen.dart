@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widget/build_customer_details_text_style.dart';
+import '../widget/current_app_bar.dart';
 
 class CustomerDetailsScreen extends StatelessWidget {
   const CustomerDetailsScreen({super.key});
@@ -7,13 +8,12 @@ class CustomerDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Genuine Technology & Research Ltd'),
-      ),
+
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
+              CurrentAppBar(),
               SizedBox(
                 height: 20,
               ),

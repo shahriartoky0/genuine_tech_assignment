@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
-
+import '../widget/current_app_bar.dart';
 import 'customer_details_screen.dart';
 
 class CustomerListScreen extends StatelessWidget {
-  const CustomerListScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Genuine Technology & Research Ltd',
-        ),
-      ),
+      // appBar: AppBar(
+      //   title: const Text(
+      //     'Genuine Technology & Research Ltd',
+      //   ),
+      // ),
       body: SafeArea(
           child: Column(
         children: [
+          CurrentAppBar(),
           SizedBox(height: 20),
           Text(
             'Customer List ',
@@ -58,3 +57,5 @@ class CustomerListScreen extends StatelessWidget {
     );
   }
 }
+
+
