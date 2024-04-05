@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:genuine_tech_assignment/controller/auth_controller.dart';
-import 'package:genuine_tech_assignment/data/models/user_details.dart';
+import 'package:genuine_tech_assignment/data/models/user_details_model.dart';
 import 'package:genuine_tech_assignment/data/network_caller/network_caller.dart';
 import 'package:genuine_tech_assignment/data/utilities/urls.dart';
 import '../widget/snack_message.dart';

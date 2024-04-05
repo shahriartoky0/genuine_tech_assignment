@@ -26,7 +26,7 @@ class _CurrentAppBarState extends State<CurrentAppBar> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(50),
             child: Image.network(
-              '${URL.imageUrl}/${AuthController.user?.empImagePath ?? Icon(Icons.person)}',
+              '${URL.baseImageUrl}/${AuthController.user?.empImagePath ?? URL.imagePlaceHolder}',
               fit: BoxFit.cover,
               height: 50,
               width: 50,

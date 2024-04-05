@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:genuine_tech_assignment/controller/auth_controller.dart';
 import 'package:genuine_tech_assignment/data/network_caller/network_response.dart';
 import 'package:http/http.dart';
 
@@ -12,7 +13,6 @@ class NetworkCaller {
         body: jsonEncode(body),
         headers: {
           'content-type': 'Application/json',
-
         },
       );
       if (response.statusCode == 200) {
@@ -48,7 +48,7 @@ class NetworkCaller {
         Uri.parse(url),
         headers: {
           'content-type': 'Application/json',
-
+          'Authorization': AuthController.token.toString(),
         },
       );
       if (response.statusCode == 200) {
@@ -77,11 +77,11 @@ class NetworkCaller {
     }
   }
 
-  // Future<void> backToLogin() async {
-  //   await AuthController.clearAuthData();
-  //   Navigator.pushAndRemoveUntil(
-  //       TaskManagerApp.navigationKey.currentContext!,
-  //       MaterialPageRoute(builder: (context) => const loginScreen()),
-  //           (route) => false);
-  // }
+// Future<void> backToLogin() async {
+//   await AuthController.clearAuthData();
+//   Navigator.pushAndRemoveUntil(
+//       TaskManagerApp.navigationKey.currentContext!,
+//       MaterialPageRoute(builder: (context) => const loginScreen()),
+//           (route) => false);
+// }
 }
