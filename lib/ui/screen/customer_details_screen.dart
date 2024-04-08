@@ -16,8 +16,8 @@ class CustomerDetailsScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              CurrentAppBar(),
-              SizedBox(
+              const CurrentAppBar(),
+              const SizedBox(
                 height: 20,
               ),
               Center(
@@ -28,26 +28,26 @@ class CustomerDetailsScreen extends StatelessWidget {
               ),
               Card(
                 elevation: 10,
-                margin: EdgeInsets.all(20),
+                margin: const EdgeInsets.all(20),
                 child: Column(
                   children: [
                     Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(10))),
                       width: double.infinity,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           Image.network(
                             '${URL.baseImageUrl}/${customerDetails?.imagePath.toString() ?? URL.imagePlaceHolder}',
                             height: 100,
                             width: 100,
                             fit: BoxFit.cover,
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           Padding(
-                            padding: EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
                             child: Column(children: [
                               buildCustomerDetail(
                                   'Name', customerDetails?.name ?? 'N/A'),
@@ -73,7 +73,7 @@ class CustomerDetailsScreen extends StatelessWidget {
                                   customerDetails?.clinetCompanyName ?? 'N/A'),
                             ]),
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                         ],
                       ),
                     )

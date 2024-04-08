@@ -17,7 +17,7 @@ class _CurrentAppBarState extends State<CurrentAppBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(5),
+      margin: const EdgeInsets.all(5),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           border: Border.all(color: Colors.black87, width: 2)),
@@ -36,7 +36,7 @@ class _CurrentAppBarState extends State<CurrentAppBar> {
         title: Center(
           child: Text(
             AuthController.user?.userName ?? "Unknown",
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
         subtitle: Center(
@@ -47,44 +47,55 @@ class _CurrentAppBarState extends State<CurrentAppBar> {
         ),
         trailing: IconButton.outlined(
             onPressed: () {
-              AlertDialog(
-                title: const Text(
-                  'Alert',
-                  style: TextStyle(color: Colors.red),
-                ),
-                content: Text(
-                  'Are you sure you want to Logout ?',
-                ),
-                actions: [
-                  TextButton(
-                      onPressed: () async {
-                        AuthController.clearAuthData();
-                        if (mounted) {
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const LoginScreen()),
-                            (route) => false,
-                          );
-
-                          showSnackMessage(context,
-                              'Successfully Logged Out. Sign in to continue');
-                        }
-                      },
-                      child: Text(
-                        'Yes',
-                      )),
-                  TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        'No',
-                      )),
-                ],
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text(
+                      'Alert',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                    content: const Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Center(
+                          child: Text(
+                            'Do you want to Logout ?',
+                          ),
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () async {
+                          AuthController.clearAuthData();
+                          if (mounted) {
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginScreen()),
+                              (route) => false,
+                            );
+                            showSnackMessage(
+                              context,
+                              'Successfully Logged Out. Sign in to continue',
+                            );
+                          }
+                        },
+                        child: const Text('Yes'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('No'),
+                      ),
+                    ],
+                  );
+                },
               );
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.logout_outlined,
               color: Colors.green,
             )),

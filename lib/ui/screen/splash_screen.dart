@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:genuine_tech_assignment/controller/auth_controller.dart';
 import 'package:genuine_tech_assignment/ui/Screen/log_in_screen.dart';
 import 'package:genuine_tech_assignment/ui/screen/customer_list_screen.dart';
+import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
@@ -16,24 +19,19 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void goToLogin() async {
-    final bool isLoggedIn = await AuthController.checkAuthState();
+    final bool isLoggedIn = await Get.find<AuthController>().checkAuthState();
     Future.delayed(
       const Duration(
         seconds: 3,
       ),
     ).then((value) {
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  isLoggedIn ? CustomerListScreen() : const LoginScreen()),
-          (route) => false);
+      Get.offAll(isLoggedIn ?  CustomerListScreen() : const LoginScreen());
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: AnimatedOpacity(
           duration: Duration(seconds: 1),

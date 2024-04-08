@@ -76,12 +76,4 @@ class NetworkCaller {
       return NetworkResponse(isSuccess: false, errorMessage: e.toString());
     }
   }
-
-// Future<void> backToLogin() async {
-//   await AuthController.clearAuthData();
-//   Navigator.pushAndRemoveUntil(
-//       TaskManagerApp.navigationKey.currentContext!,
-//       MaterialPageRoute(builder: (context) => const loginScreen()),
-//           (route) => false);
-// }
 }

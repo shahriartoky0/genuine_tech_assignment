@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:genuine_tech_assignment/controller/auth_controller.dart';
-import 'package:genuine_tech_assignment/data/models/user_details_model.dart';
-import 'package:genuine_tech_assignment/data/network_caller/network_caller.dart';
-import 'package:genuine_tech_assignment/data/utilities/urls.dart';
+import 'package:get/get.dart';
+import '../../controller/login_controller.dart';
 import '../widget/snack_message.dart';
 import 'customer_list_screen.dart';
 
@@ -17,7 +15,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailTEController = TextEditingController();
   final TextEditingController _passwordTEController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool logInProgress = false;
+  final LoginController _loginController = Get.find<LoginController>();
 
   @override
   Widget build(BuildContext context) {
@@ -29,19 +27,19 @@ class _LoginScreenState extends State<LoginScreen> {
           centerTitle: true,
         ),
         body: Padding(
-          padding: EdgeInsets.all(24),
+          padding: const EdgeInsets.all(24),
           child: SingleChildScrollView(
             child: Form(
               key: _formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(height: 120),
+                  const SizedBox(height: 120),
                   Text(
                     'Customer Management ',
                     style: Theme.of(context).textTheme.displayMedium,
                   ),
-                  SizedBox(height: 25),
+                  const SizedBox(height: 25),
                   TextFormField(
                       validator: (value) {
                         return isEmailValid(value);
@@ -54,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         prefixIconColor: Colors.teal,
                         labelText: 'Admin Email',
                       )),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   TextFormField(
                       validator: (String? value) {
                         if (value?.isEmpty ?? true) {
@@ -72,14 +70,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 14),
                   SizedBox(
                       width: double.infinity,
-                      child: Visibility(
-                        visible: logInProgress == false,
-                        replacement: const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                        child: ElevatedButton(
-                            onPressed: _signIn, child: Text('Log in')),
-                      ))
+                      child: GetBuilder<LoginController>(
+                          builder: (loginController) {
+                        return Visibility(
+                          visible: loginController.logInProgress == false,
+                          replacement: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                          child: ElevatedButton(
+                              onPressed: _signIn, child: const Text('Log in')),
+                        );
+                      }))
                 ],
               ),
             ),
@@ -90,47 +91,39 @@ class _LoginScreenState extends State<LoginScreen> {
   // API request handle
   Future<void> _signIn() async {
     if (_formKey.currentState!.validate()) {
-      if (mounted) {
-        logInProgress = true;
-        setState(() {});
-      }
-      final response = await NetworkCaller().getRequest(URL.loginUrl(
-          _emailTEController.text.trim(), _passwordTEController.text));
-      if (mounted) {
-        logInProgress = false;
-        setState(() {});
-      }
-      if (response.isSuccess) {
-        final dynamic token = response.jsonResponse?['Token'];
-        final dynamic userDetailsJson = response.jsonResponse;
-        if (token != null && userDetailsJson != null) {
-          final userDetails = UserDetails.fromJson(userDetailsJson);
-          await AuthController.saveUserInformation(token, userDetails);
-          clearTextFields();
-          if (mounted) {
-            showSnackMessage(context, 'Login Successful');
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CustomerListScreen(),
-                ));
-          }
+      final response = await _loginController.signIn(
+          email: _emailTEController.text.trim(),
+          password: _passwordTEController.text);
+
+      if (response) {
+        clearTextFields();
+        if (mounted) {
+          showSnackMessage(context, _loginController.message);
+
+          Get.offAll( CustomerListScreen());
         }
-      } else {
-        if (response.statusCode == 401) {
-          if (mounted) {
-            showSnackMessage(context, 'Incorrect Username or Password', true);
-          }
-        } else {
-          if (mounted) {
-            showSnackMessage(context, 'An Error Occurred', true);
-          }
-        }
+      }
+    } else {
+      if (mounted) {
+        print(_loginController.message);
+        showSnackMessage(context, _loginController.message, true);
       }
     }
   }
 
-  // validate Email Address
+  @override
+  void dispose() {
+    _emailTEController.dispose();
+    _passwordTEController.dispose();
+    super.dispose();
+  }
+
+  void clearTextFields() {
+    _emailTEController.clear();
+    _passwordTEController.clear();
+  }
+
+// validate Email Address
   String? isEmailValid(String? value) {
     if (value == null || value.trim().isEmpty) {
       return 'Please enter your email';
@@ -139,17 +132,5 @@ class _LoginScreenState extends State<LoginScreen> {
       return 'Please enter a valid email address';
     }
     return null;
-  }
-
-  void clearTextFields() {
-    _emailTEController.clear();
-    _passwordTEController.clear();
-  }
-
-  @override
-  void dispose() {
-    _emailTEController.dispose();
-    _passwordTEController.dispose();
-    super.dispose();
   }
 }
